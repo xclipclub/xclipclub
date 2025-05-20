@@ -1,0 +1,27 @@
+name: Livestream Website to YouTube
+
+on:
+  schedule:
+    # Lên lịch để livestream vào lúc 18h15 UTC mỗi ngày
+    - cron: '15 18 * * *'
+
+jobs:
+  livestream:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y ffmpeg chromium-browser
+
+    - name: Start Chromium in headless mode and stream
+      run: |
+        # Mở website https://soicau24h.club trong Chromium headless
+        chromium-browser --headless --remote-debugging-port=9222 --window-size=1920x1080 --disable-gpu --no-sandbox "https://soicau24h.club" &
+
+        # Quay màn hình và livestream lên YouTube với Stream Key
+        ffmpeg -f x11grab -s 1920x1080 -i :0.0+0,0 -vcodec libx264 -acodec aac -f flv rtmp://a.rtmp.youtube.com/live2/avg2-ufgp-pf24-th2w-4ep9
