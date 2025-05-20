@@ -1,9 +1,11 @@
 name: Livestream Website to YouTube
 
 on:
+  # Lên lịch livestream mỗi ngày vào lúc 18h15 UTC
   schedule:
-    # Lên lịch để livestream vào lúc 18h15 UTC mỗi ngày
     - cron: '15 18 * * *'
+  # Cho phép chạy thủ công khi cần (workflow_dispatch)
+  workflow_dispatch:
 
 jobs:
   livestream:
